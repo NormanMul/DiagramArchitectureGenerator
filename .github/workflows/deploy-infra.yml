@@ -1,0 +1,91 @@
+name: deploy-infra
+
+on:
+  pull_request:
+    branches: [main]
+    paths: ["infra/**", ".github/workflows/deploy-infra.yml"]
+  push:
+    branches: [main]
+    paths: ["infra/**", ".github/workflows/deploy-infra.yml"]
+  workflow_dispatch:
+
+permissions:
+  id-token: write       # OIDC federation to Azure
+  contents: read
+  pull-requests: write  # to comment what-if results on the PR
+
+env:
+  AZURE_SUBSCRIPTION_ID: d29155f5-87be-4743-9499-9a5e72cbfc1b
+  AZURE_TENANT_ID: 2e25212c-2eea-4b99-b5a3-5bbcf76e455c
+  AZURE_LOCATION: southeastasia
+  PARAMETERS_FILE: infra/parameters/prod.bicepparam
+
+jobs:
+  whatif:
+    name: bicep what-if
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_DEPLOY_CLIENT_ID }}
+          tenant-id: ${{ env.AZURE_TENANT_ID }}
+          subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
+
+      - name: az deployment sub what-if
+        id: whatif
+        run: |
+          az deployment sub what-if \
+            --location ${{ env.AZURE_LOCATION }} \
+            --template-file infra/main.bicep \
+            --parameters ${{ env.PARAMETERS_FILE }} \
+            --result-format FullResourcePayloads \
+            --no-pretty-print > whatif.json
+          {
+            echo 'whatif<<EOF'
+            az deployment sub what-if \
+              --location ${{ env.AZURE_LOCATION }} \
+              --template-file infra/main.bicep \
+              --parameters ${{ env.PARAMETERS_FILE }} \
+              --result-format FullResourcePayloads 2>&1 | head -n 200
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Comment what-if on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const body = `### \`bicep what-if\` for ${{ env.PARAMETERS_FILE }}\n\n\`\`\`\n${{ steps.whatif.outputs.whatif }}\n\`\`\``;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });
+
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    needs: whatif
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    environment: prod   # required to gate on a manual approval (configure in repo settings)
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_DEPLOY_CLIENT_ID }}
+          tenant-id: ${{ env.AZURE_TENANT_ID }}
+          subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
+
+      - name: az deployment sub create
+        run: |
+          az deployment sub create \
+            --location ${{ env.AZURE_LOCATION }} \
+            --template-file infra/main.bicep \
+            --parameters ${{ env.PARAMETERS_FILE }} \
+            --name "archgen-$(date +%Y%m%d%H%M%S)"

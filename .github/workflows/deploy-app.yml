@@ -1,0 +1,71 @@
+name: deploy-app
+
+on:
+  push:
+    branches: [main]
+    paths: ["backend/**", ".github/workflows/deploy-app.yml"]
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AZURE_SUBSCRIPTION_ID: d29155f5-87be-4743-9499-9a5e72cbfc1b
+  AZURE_TENANT_ID: 2e25212c-2eea-4b99-b5a3-5bbcf76e455c
+  RESOURCE_GROUP: rg-archgen-prod-sea
+  ACR_NAME: crarchgenprodsea
+  CONTAINER_APP: ca-archgen-api-prod-sea
+  IMAGE_NAME: archgen-api
+
+jobs:
+  build-and-deploy:
+    name: build + push + revision
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_DEPLOY_CLIENT_ID }}
+          tenant-id: ${{ env.AZURE_TENANT_ID }}
+          subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
+
+      - name: ACR login
+        run: az acr login --name ${{ env.ACR_NAME }}
+
+      - name: Build + push image
+        run: |
+          IMAGE_TAG="${GITHUB_SHA::12}"
+          az acr build \
+            --registry ${{ env.ACR_NAME }} \
+            --image ${{ env.IMAGE_NAME }}:${IMAGE_TAG} \
+            --image ${{ env.IMAGE_NAME }}:latest \
+            --file backend/Dockerfile \
+            backend
+          echo "IMAGE_TAG=${IMAGE_TAG}" >> "$GITHUB_ENV"
+
+      - name: Trivy scan
+        uses: aquasecurity/trivy-action@0.32.0
+        with:
+          image-ref: ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          severity: CRITICAL,HIGH
+          exit-code: "1"
+          ignore-unfixed: true
+
+      - name: Update Container App revision
+        run: |
+          az containerapp update \
+            -g ${{ env.RESOURCE_GROUP }} \
+            -n ${{ env.CONTAINER_APP }} \
+            --image ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
+            --revision-suffix "${IMAGE_TAG}"
+
+      - name: Smoke test
+        run: |
+          FQDN=$(az containerapp show -g ${{ env.RESOURCE_GROUP }} -n ${{ env.CONTAINER_APP }} --query properties.configuration.ingress.fqdn -o tsv)
+          # Container App is internal-only; smoke test via private network is gated by AFD.
+          echo "Container App FQDN (internal): $FQDN"
+          # The real smoke test runs against the Front Door endpoint in deploy-frontend.yml.

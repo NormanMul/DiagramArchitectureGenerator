@@ -1,0 +1,114 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: backend (lint + type + test)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          version: "0.11.7"
+          enable-cache: true
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install graphviz (for renderer tests)
+        run: sudo apt-get update && sudo apt-get install -y graphviz
+
+      - name: uv sync
+        run: uv sync --frozen --all-extras
+
+      - name: ruff (lint)
+        run: uv run ruff check .
+
+      - name: ruff (format check)
+        run: uv run ruff format --check .
+
+      - name: mypy --strict
+        run: uv run mypy --strict app
+
+      - name: pytest (≥80% coverage)
+        run: uv run pytest --cov=app --cov-report=term-missing --cov-fail-under=80
+
+  frontend:
+    name: frontend (lint + type + test)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: "24"
+
+      - name: Enable Corepack + pnpm
+        run: corepack enable && corepack prepare pnpm@latest --activate
+
+      - name: pnpm install
+        run: pnpm install --frozen-lockfile
+
+      - name: biome check
+        run: pnpm exec biome check .
+
+      - name: tsc --noEmit
+        run: pnpm exec tsc --noEmit
+
+      - name: vitest
+        run: pnpm test
+
+  bicep:
+    name: bicep (build + lint)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install Bicep
+        run: |
+          az bicep install
+          az bicep version
+
+      - name: Bicep lint + build
+        run: |
+          for f in infra/main.bicep infra/modules/*.bicep; do
+            echo "=== $f ==="
+            az bicep lint --file "$f"
+            az bicep build --file "$f" --stdout > /dev/null
+          done
+
+  icon-integrity:
+    name: icons unmodified check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Verify no recent commits modify icons/azure_V19/*.svg
+        run: |
+          # CI guard: a PR must not touch SVGs directly. Only refresh-icons.yml may.
+          if git log --since="1 day ago" --name-only --pretty=format: ${{ github.sha }} \
+              | grep -E '^icons/azure_V19/.*\.svg$'; then
+            echo "::error::PR modifies bundled icon SVGs. Only refresh-icons.yml may update icons/azure_V19/."
+            exit 1
+          fi

@@ -1,0 +1,81 @@
+name: deploy-frontend
+
+on:
+  push:
+    branches: [main]
+    paths: ["frontend/**", ".github/workflows/deploy-frontend.yml"]
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AZURE_SUBSCRIPTION_ID: d29155f5-87be-4743-9499-9a5e72cbfc1b
+  AZURE_TENANT_ID: 2e25212c-2eea-4b99-b5a3-5bbcf76e455c
+  RESOURCE_GROUP: rg-archgen-prod-sea
+  ACR_NAME: crarchgenprodsea
+  CONTAINER_APP: ca-archgen-web-prod-sea
+  IMAGE_NAME: archgen-web
+  AFD_ENDPOINT: diagramarchitecturegenerator.azurefd.net
+
+jobs:
+  build-and-deploy:
+    name: build + push + revision (Next.js SSR on ACA)
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: "24"
+
+      - name: Enable pnpm
+        run: corepack enable && corepack prepare pnpm@latest --activate
+
+      - name: pnpm install
+        working-directory: frontend
+        run: pnpm install --frozen-lockfile
+
+      - name: pnpm build
+        working-directory: frontend
+        run: pnpm build
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_DEPLOY_CLIENT_ID }}
+          tenant-id: ${{ env.AZURE_TENANT_ID }}
+          subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
+
+      - name: ACR build (Next.js standalone image)
+        run: |
+          IMAGE_TAG="${GITHUB_SHA::12}"
+          az acr build \
+            --registry ${{ env.ACR_NAME }} \
+            --image ${{ env.IMAGE_NAME }}:${IMAGE_TAG} \
+            --image ${{ env.IMAGE_NAME }}:latest \
+            --file frontend/Dockerfile \
+            frontend
+          echo "IMAGE_TAG=${IMAGE_TAG}" >> "$GITHUB_ENV"
+
+      - name: Update Container App revision
+        run: |
+          az containerapp update \
+            -g ${{ env.RESOURCE_GROUP }} \
+            -n ${{ env.CONTAINER_APP }} \
+            --image ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
+            --revision-suffix "${IMAGE_TAG}"
+
+      - name: Smoke test Front Door endpoint
+        run: |
+          for i in 1 2 3 4 5; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" "https://${{ env.AFD_ENDPOINT }}/")
+            echo "Attempt $i → HTTP $STATUS"
+            [[ "$STATUS" == "200" ]] && exit 0
+            sleep 10
+          done
+          echo "::error::Front Door endpoint did not return 200 after retries"
+          exit 1

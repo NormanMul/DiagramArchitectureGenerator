@@ -1,0 +1,70 @@
+name: refresh-icons
+
+# Monthly: pull the latest Azure Architecture Icons pack, diff vs. bundled,
+# open a PR if a new V-N version is available.
+
+on:
+  schedule:
+    - cron: "0 6 1 * *"  # 06:00 UTC on the 1st of each month
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Download latest Azure icons pack
+        shell: pwsh
+        run: |
+          ./scripts/download-azure-icons.ps1 -OutputDir ./icons/azure_V19_new
+          # Capture the version label
+          $version = Get-Content ./icons/azure_V19_new/VERSION.txt -Raw
+          "ICON_VERSION=$($version.Trim())" >> $env:GITHUB_ENV
+
+      - name: Diff against bundled
+        id: diff
+        run: |
+          if diff -rq icons/azure_V19/ icons/azure_V19_new/ > diff.txt 2>&1; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            cat diff.txt
+          fi
+
+      - name: Replace bundled icons if changed
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          rm -rf icons/azure_V19/
+          mv icons/azure_V19_new icons/azure_V19/
+
+      - name: Regenerate manifest
+        if: steps.diff.outputs.changed == 'true'
+        shell: pwsh
+        run: ./scripts/build-icon-manifest.ps1
+
+      - name: Open PR
+        if: steps.diff.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v8
+        with:
+          commit-message: "chore(icons): refresh to ${{ env.ICON_VERSION }}"
+          branch: chore/refresh-icons-${{ env.ICON_VERSION }}
+          title: "chore(icons): refresh to ${{ env.ICON_VERSION }}"
+          body: |
+            Automated icon refresh from Microsoft Learn.
+
+            **New version**: `${{ env.ICON_VERSION }}`
+
+            ### Checklist before merge
+            - [ ] Review file additions / removals / renames in `icons/azure_V19/`
+            - [ ] Check `icons/manifest.json` diff for any name changes
+            - [ ] Run `pytest backend/tests/patterns/test_pattern_icons_exist.py` locally to confirm pattern descriptors still resolve
+            - [ ] Update any affected pattern descriptors (do NOT keep old icons by copying from the previous pack)
+
+            See [docs/icon-compliance.md](docs/icon-compliance.md) for the full procedure.
+          labels: icons,dependencies,automated
+          delete-branch: true
