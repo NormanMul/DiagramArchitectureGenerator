@@ -53,7 +53,7 @@ param frontDoorSku string = 'Standard_AzureFrontDoor'
 param frontDoorEndpointName string = 'diagramarchitecturegenerator'
 
 @description('GitHub repository (org/repo) for OIDC federation.')
-param githubRepo string = 'mprawironego_microsoft/Genesis-DiagramArchitectureGenerator'
+param githubRepo string = 'NormanMul/DiagramArchitectureGenerator'
 
 @description('Branch the federated credential trusts for deploys.')
 param githubBranch string = 'main'

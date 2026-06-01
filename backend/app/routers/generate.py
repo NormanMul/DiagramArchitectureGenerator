@@ -8,6 +8,7 @@ Conventions:
 
 from __future__ import annotations
 
+import base64
 import logging
 import tempfile
 import uuid
@@ -26,6 +27,7 @@ from app.agents.architect import (
     TokenBudgetExceeded,
     build_architect,
 )
+from app.agents.stub_agent import StubArchitectAgent
 from app.azure_clients import ensure_container, upload_blob
 from app.renderer.diagrams_render import render_pattern
 from app.renderer.drawio_export import export_drawio
@@ -42,14 +44,18 @@ router = APIRouter(prefix="/api", tags=["generate"])
 # Dependency: cached architect agent
 # -----------------------------------------------------------------------------
 
-_agent_holder: dict[str, ArchitectAgent] = {}
+_agent_holder: dict[str, ArchitectAgent | StubArchitectAgent] = {}
 
 
 def _get_agent(
     settings: Annotated[Settings, Depends(get_settings)],
-) -> ArchitectAgent:
+) -> ArchitectAgent | StubArchitectAgent:
     if "agent" not in _agent_holder:
-        _agent_holder["agent"] = build_architect(settings)
+        if settings.stub_mode:
+            _logger.warning("ARCHGEN_STUB_MODE=true — using StubArchitectAgent")
+            _agent_holder["agent"] = StubArchitectAgent()
+        else:
+            _agent_holder["agent"] = build_architect(settings)
     return _agent_holder["agent"]
 
 
@@ -218,9 +224,12 @@ async def _render_and_upload(
 ) -> list[DiagramArtifact]:
     """Render the diagram + .drawio + standalone .py and upload all to Blob.
 
-    Returns the list of artifact URLs in a stable order.
+    Returns the list of artifact URLs in a stable order. In stub mode the
+    upload step is skipped and base64 data URLs are returned instead, so
+    local dev works without an Azure storage account.
     """
-    await ensure_container(settings.storage_diagrams_container, settings=settings)
+    if not settings.stub_mode:
+        await ensure_container(settings.storage_diagrams_container, settings=settings)
 
     with tempfile.TemporaryDirectory(prefix="archgen-") as tmp:
         out_dir = Path(tmp)
@@ -237,12 +246,16 @@ async def _render_and_upload(
         ]:
             data = path.read_bytes()
             blob_name = f"{diagram_id}.{kind}"
-            url = await upload_blob(
-                settings.storage_diagrams_container,
-                blob_name,
-                data,
-                ctype,
-                settings=settings,
-            )
+            if settings.stub_mode:
+                b64 = base64.b64encode(data).decode("ascii")
+                url = f"data:{ctype};base64,{b64}"
+            else:
+                url = await upload_blob(
+                    settings.storage_diagrams_container,
+                    blob_name,
+                    data,
+                    ctype,
+                    settings=settings,
+                )
             artifacts.append(DiagramArtifact(kind=kind, url=url, bytes_size=len(data)))
         return artifacts

@@ -79,6 +79,17 @@ class Settings(BaseSettings):
         alias="ICONS_MANIFEST_PATH",
     )
 
+    # --- Stub mode (local dev/test without Azure) ---
+    stub_mode: bool = Field(
+        default=False,
+        alias="ARCHGEN_STUB_MODE",
+        description=(
+            "When True, agent returns the top-keyword-matched pattern without "
+            "calling Foundry, and storage uploads return data URLs instead of "
+            "talking to Blob. Used for local UI/UX smoke tests."
+        ),
+    )
+
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:

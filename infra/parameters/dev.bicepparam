@@ -13,7 +13,7 @@ param searchSku = 'free'
 param frontDoorSku = 'Standard_AzureFrontDoor'
 param frontDoorEndpointName = 'diagramarchitecturegenerator-dev'
 
-param githubRepo = 'mprawironego_microsoft/Genesis-DiagramArchitectureGenerator'
+param githubRepo = 'NormanMul/DiagramArchitectureGenerator'
 param githubBranch = 'main'
 
 // /24 to leave room for prod alongside in shared dev/prod scenarios.
@@ -29,6 +29,6 @@ param tags = {
   workload: 'archgen'
   env: 'dev'
   managedBy: 'bicep'
-  source: 'https://github.com/mprawironego_microsoft/Genesis-DiagramArchitectureGenerator'
+  source: 'https://github.com/NormanMul/DiagramArchitectureGenerator'
   costCenter: 'mcaps-personal'
 }

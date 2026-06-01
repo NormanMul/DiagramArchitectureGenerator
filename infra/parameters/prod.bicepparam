@@ -17,7 +17,7 @@ param frontDoorSku = 'Standard_AzureFrontDoor'
 param frontDoorEndpointName = 'diagramarchitecturegenerator'
 
 // GitHub repo for OIDC federation.
-param githubRepo = 'mprawironego_microsoft/Genesis-DiagramArchitectureGenerator'
+param githubRepo = 'NormanMul/DiagramArchitectureGenerator'
 param githubBranch = 'main'
 
 // Networking.
@@ -35,6 +35,6 @@ param tags = {
   workload: 'archgen'
   env: 'prod'
   managedBy: 'bicep'
-  source: 'https://github.com/mprawironego_microsoft/Genesis-DiagramArchitectureGenerator'
+  source: 'https://github.com/NormanMul/DiagramArchitectureGenerator'
   costCenter: 'mcaps-personal'
 }

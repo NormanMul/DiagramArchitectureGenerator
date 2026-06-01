@@ -11,7 +11,7 @@ param name string
 param location string
 param tags object
 
-@description('GitHub repo in "owner/repo" form, e.g. mprawironego_microsoft/Genesis-DiagramArchitectureGenerator.')
+@description('GitHub repo in "owner/repo" form, e.g. NormanMul/DiagramArchitectureGenerator.')
 param githubRepo string
 
 @description('Branch this credential trusts for push events.')

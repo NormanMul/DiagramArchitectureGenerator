@@ -1,11 +1,11 @@
 # https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
 # Default owner for everything in the repo.
-*       @mprawironego_microsoft
+*       @NormanMul
 
 # Infrastructure changes always require an architect review.
-/infra/                 @mprawironego_microsoft
-/.github/workflows/     @mprawironego_microsoft
+/infra/                 @NormanMul
+/.github/workflows/     @NormanMul
 
 # Icon set is licensed material — protect against accidental modification.
-/icons/                 @mprawironego_microsoft
-/THIRD_PARTY_NOTICES.md @mprawironego_microsoft
+/icons/                 @NormanMul
+/THIRD_PARTY_NOTICES.md @NormanMul

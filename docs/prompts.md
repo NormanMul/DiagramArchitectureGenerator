@@ -28,7 +28,7 @@ inline SVG. Chat-based iteration. Microsoft V19 icons unmodified.
 - **Region**: `southeastasia` primary, `australiaeast` paired.
 - **Foundry**: `fdy-archgen-sea-01`, model `gpt-5.4` v`2026-03-05`
   (Global Standard, confirmed available 2026-05-29).
-- **GitHub**: repo `mprawironego_microsoft/Genesis-DiagramArchitectureGenerator`
+- **GitHub**: repo `NormanMul/DiagramArchitectureGenerator`
   (adopted, not the prompt's proposed `azure-archgen`).
 - **MCP servers wired into the agent**: GitHub MCP, Microsoft Learn MCP,
   custom diagrams-as-code MCP (we build).

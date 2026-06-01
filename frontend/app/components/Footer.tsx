@@ -25,11 +25,11 @@ export function Footer() {
       <p style={{ margin: "0.5rem 0" }}>
         Source:{" "}
         <a
-          href="https://github.com/mprawironego_microsoft/Genesis-DiagramArchitectureGenerator"
+          href="https://github.com/NormanMul/DiagramArchitectureGenerator"
           target="_blank"
           rel="noopener noreferrer"
         >
-          mprawironego_microsoft/Genesis-DiagramArchitectureGenerator
+          NormanMul/DiagramArchitectureGenerator
         </a>
         {" · MIT licensed."}
       </p>
