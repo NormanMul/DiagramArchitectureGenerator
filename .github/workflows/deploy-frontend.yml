@@ -27,7 +27,7 @@ jobs:
     if: vars.AZURE_DEPLOY_CLIENT_ID != ''
     environment: prod
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Setup Node
         uses: actions/setup-node@v5

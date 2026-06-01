@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     if: vars.AZURE_DEPLOY_CLIENT_ID != ''
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Azure login (OIDC)
         uses: azure/login@v2
@@ -76,7 +76,7 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     environment: prod   # required to gate on a manual approval (configure in repo settings)
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Azure login (OIDC)
         uses: azure/login@v2
