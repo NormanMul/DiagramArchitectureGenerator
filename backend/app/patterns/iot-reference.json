@@ -1,0 +1,28 @@
+{
+  "pattern_name": "iot-reference",
+  "title": "IoT Reference Architecture",
+  "source_url": "https://learn.microsoft.com/azure/architecture/reference-architectures/iot",
+  "tiers": ["devices", "ingest", "process", "store", "consume"],
+  "nodes": [
+    { "id": "devices",   "label": "IoT devices",          "icon_id": "iot-edge",              "tier": "devices" },
+    { "id": "iothub",    "label": "IoT Hub",              "icon_id": "iot-hub",               "tier": "ingest" },
+    { "id": "dps",       "label": "DPS",                  "icon_id": "iot-hub",               "tier": "ingest" },
+    { "id": "stream",    "label": "Stream Analytics",     "icon_id": "stream-analytics-jobs", "tier": "process" },
+    { "id": "func",      "label": "Functions",            "icon_id": "function-apps",         "tier": "process" },
+    { "id": "hot",       "label": "Cosmos DB (hot path)", "icon_id": "azure-cosmos-db",       "tier": "store" },
+    { "id": "cold",      "label": "ADLS (cold path)",     "icon_id": "azure-data-lake-storage-gen2","tier": "store" },
+    { "id": "twins",     "label": "Digital Twins",        "icon_id": "azure-digital-twins",   "tier": "consume" },
+    { "id": "pbi",       "label": "Power BI",             "icon_id": "power-bi",              "tier": "consume" }
+  ],
+  "edges": [
+    { "source": "devices", "target": "dps",    "label": "register" },
+    { "source": "devices", "target": "iothub", "label": "telemetry" },
+    { "source": "iothub",  "target": "stream" },
+    { "source": "iothub",  "target": "func" },
+    { "source": "stream",  "target": "hot",    "label": "hot" },
+    { "source": "stream",  "target": "cold",   "label": "cold" },
+    { "source": "hot",     "target": "twins" },
+    { "source": "hot",     "target": "pbi" }
+  ],
+  "well_architected_notes": "DPS for zero-touch provisioning at scale. Lambda-style hot/cold paths: hot for real-time alerting (sub-second), cold for analytics. Digital Twins for spatial intelligence."
+}

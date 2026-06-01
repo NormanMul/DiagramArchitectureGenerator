@@ -1,0 +1,32 @@
+{
+  "pattern_name": "agent-orchestration-foundry",
+  "title": "AI Agent Orchestration with Foundry Agent Service",
+  "source_url": "https://learn.microsoft.com/azure/ai-foundry/agents/overview",
+  "tiers": ["client", "gateway", "orchestrator", "agents", "tools", "ops"],
+  "nodes": [
+    { "id": "user",      "label": "User",                 "icon_id": "users",                       "tier": "client" },
+    { "id": "afd",       "label": "Front Door + WAF",     "icon_id": "front-door-and-cdn-profiles", "tier": "gateway" },
+    { "id": "apim",      "label": "API Management",       "icon_id": "api-management-services",     "tier": "gateway" },
+    { "id": "agent-svc", "label": "Foundry Agent Service","icon_id": "azure-openai",                "tier": "orchestrator" },
+    { "id": "agent-1",   "label": "Planner agent",        "icon_id": "azure-openai",                "tier": "agents" },
+    { "id": "agent-2",   "label": "Retriever agent",      "icon_id": "azure-openai",                "tier": "agents" },
+    { "id": "agent-3",   "label": "Executor agent",       "icon_id": "azure-openai",                "tier": "agents" },
+    { "id": "search",    "label": "AI Search",            "icon_id": "search-services",             "tier": "tools" },
+    { "id": "func",      "label": "Functions (tool)",     "icon_id": "function-apps",               "tier": "tools" },
+    { "id": "cosmos",    "label": "Cosmos (memory)",      "icon_id": "azure-cosmos-db",             "tier": "tools" },
+    { "id": "appi",      "label": "App Insights",         "icon_id": "application-insights",        "tier": "ops" }
+  ],
+  "edges": [
+    { "source": "user",      "target": "afd" },
+    { "source": "afd",       "target": "apim" },
+    { "source": "apim",      "target": "agent-svc" },
+    { "source": "agent-svc", "target": "agent-1",   "label": "delegate" },
+    { "source": "agent-1",   "target": "agent-2",   "label": "fetch" },
+    { "source": "agent-1",   "target": "agent-3",   "label": "act" },
+    { "source": "agent-2",   "target": "search",    "style": "dashed" },
+    { "source": "agent-3",   "target": "func",      "style": "dashed" },
+    { "source": "agent-svc", "target": "cosmos",    "label": "thread state" },
+    { "source": "agent-svc", "target": "appi",      "style": "dotted" }
+  ],
+  "well_architected_notes": "Foundry Agent Service handles thread state + tool calling. Strict tool allowlist per agent. Content Safety on all I/O. Token budget enforced at orchestrator (not per-agent — agents can recurse)."
+}

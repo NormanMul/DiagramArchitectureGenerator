@@ -1,0 +1,26 @@
+{
+  "pattern_name": "enterprise-bi-synapse",
+  "title": "Enterprise BI with Synapse",
+  "source_url": "https://learn.microsoft.com/azure/architecture/example-scenario/analytics/enterprise-bi-synapse",
+  "tiers": ["sources", "ingest", "storage", "compute", "consume"],
+  "nodes": [
+    { "id": "onprem",  "label": "On-prem sources",       "icon_id": "data-sources",        "tier": "sources" },
+    { "id": "saas",    "label": "SaaS sources",          "icon_id": "data-sources",        "tier": "sources" },
+    { "id": "df",      "label": "Data Factory",          "icon_id": "data-factories",      "tier": "ingest" },
+    { "id": "adls",    "label": "ADLS Gen2",             "icon_id": "azure-data-lake-storage-gen2","tier": "storage" },
+    { "id": "syn",     "label": "Synapse SQL Pool",      "icon_id": "synapse-analytics",   "tier": "compute" },
+    { "id": "spark",   "label": "Synapse Spark",         "icon_id": "synapse-analytics",   "tier": "compute" },
+    { "id": "aas",     "label": "Analysis Services",     "icon_id": "analysis-services",   "tier": "compute" },
+    { "id": "pbi",     "label": "Power BI",              "icon_id": "power-bi",            "tier": "consume" }
+  ],
+  "edges": [
+    { "source": "onprem", "target": "df" },
+    { "source": "saas",   "target": "df" },
+    { "source": "df",     "target": "adls", "label": "land" },
+    { "source": "adls",   "target": "spark","label": "transform" },
+    { "source": "spark",  "target": "syn",  "label": "load DW" },
+    { "source": "syn",    "target": "aas",  "label": "model" },
+    { "source": "aas",    "target": "pbi" }
+  ],
+  "well_architected_notes": "ELT (not ETL): land raw to ADLS, transform in-place with Spark, load DW. Power BI on AAS gives semantic-model governance. Reserve Synapse capacity for steady-state cost."
+}

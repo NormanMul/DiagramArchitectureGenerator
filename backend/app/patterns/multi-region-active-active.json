@@ -1,0 +1,27 @@
+{
+  "pattern_name": "multi-region-active-active",
+  "title": "Multi-region Active-Active Web App",
+  "source_url": "https://learn.microsoft.com/azure/architecture/web-apps/app-service/architectures/multi-region",
+  "tiers": ["global", "region-a", "region-b", "data"],
+  "nodes": [
+    { "id": "afd",     "label": "Front Door (geo)",   "icon_id": "front-door-and-cdn-profiles","tier": "global" },
+    { "id": "dns",     "label": "Traffic Manager",    "icon_id": "traffic-manager-profiles",   "tier": "global" },
+    { "id": "app-a",    "label": "App Service (EAST)", "icon_id": "app-services",               "tier": "region-a" },
+    { "id": "app-b",    "label": "App Service (WEST)", "icon_id": "app-services",               "tier": "region-b" },
+    { "id": "cosmos",  "label": "Cosmos DB (multi-region)","icon_id": "azure-cosmos-db",       "tier": "data" },
+    { "id": "storage-a","label": "Blob (RA-GZRS) EAST","icon_id": "storage-accounts",           "tier": "region-a" },
+    { "id": "storage-b","label": "Blob (RA-GZRS) WEST","icon_id": "storage-accounts",           "tier": "region-b" },
+    { "id": "redis-a",  "label": "Redis EAST",         "icon_id": "cache-redis",                "tier": "region-a" },
+    { "id": "redis-b",  "label": "Redis WEST",         "icon_id": "cache-redis",                "tier": "region-b" }
+  ],
+  "edges": [
+    { "source": "afd",    "target": "app-a" },
+    { "source": "afd",    "target": "app-b" },
+    { "source": "app-a",   "target": "cosmos","label": "multi-write" },
+    { "source": "app-b",   "target": "cosmos","label": "multi-write" },
+    { "source": "app-a",   "target": "redis-a" },
+    { "source": "app-b",   "target": "redis-b" },
+    { "source": "storage-a","target": "storage-b","label": "geo-replication", "style": "dashed" }
+  ],
+  "well_architected_notes": "Active-active beats active-passive on RTO/RPO. Cosmos multi-region write removes write-region bottleneck — use Strong only when needed. Per-region Redis avoids cross-region cache reads."
+}

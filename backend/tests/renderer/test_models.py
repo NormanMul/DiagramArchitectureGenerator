@@ -79,6 +79,11 @@ class TestPopulatedPattern:
         with pytest.raises(ValidationError):
             Node(id="bad id with spaces", label="A", icon_id="front-door", tier="t")
 
+    def test_node_id_allows_kebab_and_snake(self) -> None:
+        # Both styles are valid — pattern descriptors use kebab-case.
+        Node(id="agent-1", label="A", icon_id="front-door", tier="t")
+        Node(id="agent_1", label="A", icon_id="front-door", tier="t")
+
     def test_too_many_nodes_rejected(self) -> None:
         nodes = [Node(id=f"n{i}", label=f"N{i}", icon_id="front-door", tier="t") for i in range(81)]
         with pytest.raises(ValidationError):

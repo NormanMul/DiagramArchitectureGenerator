@@ -1,0 +1,27 @@
+{
+  "pattern_name": "event-driven-microservices",
+  "title": "Event-driven Microservices on Container Apps",
+  "source_url": "https://learn.microsoft.com/azure/architecture/example-scenario/serverless/microservices-with-container-apps-dapr",
+  "tiers": ["edge", "ingress", "services", "messaging", "data"],
+  "nodes": [
+    { "id": "afd",       "label": "Front Door",           "icon_id": "front-door-and-cdn-profiles", "tier": "edge" },
+    { "id": "apim",      "label": "API Management",       "icon_id": "api-management-services",     "tier": "ingress" },
+    { "id": "svc-order", "label": "Order service",        "icon_id": "container-apps",              "tier": "services" },
+    { "id": "svc-pay",   "label": "Payment service",      "icon_id": "container-apps",              "tier": "services" },
+    { "id": "svc-ship",  "label": "Shipping service",     "icon_id": "container-apps",              "tier": "services" },
+    { "id": "sb",        "label": "Service Bus",          "icon_id": "service-bus",                 "tier": "messaging" },
+    { "id": "eg",        "label": "Event Grid",           "icon_id": "event-grid-topics",           "tier": "messaging" },
+    { "id": "cosmos",    "label": "Cosmos DB",            "icon_id": "azure-cosmos-db",             "tier": "data" }
+  ],
+  "edges": [
+    { "source": "afd",       "target": "apim" },
+    { "source": "apim",      "target": "svc-order" },
+    { "source": "svc-order", "target": "sb",         "label": "order.placed" },
+    { "source": "sb",        "target": "svc-pay",    "label": "consume" },
+    { "source": "svc-pay",   "target": "eg",         "label": "payment.completed" },
+    { "source": "eg",        "target": "svc-ship",   "label": "subscribe" },
+    { "source": "svc-order", "target": "cosmos" },
+    { "source": "svc-pay",   "target": "cosmos" }
+  ],
+  "well_architected_notes": "Service Bus for ordered/durable queueing (transactional). Event Grid for fan-out pub/sub. Dapr sidecars give service discovery + retries without code. Each service owns its Cosmos container."
+}

@@ -1,0 +1,26 @@
+{
+  "pattern_name": "hub-spoke",
+  "title": "Hub-Spoke Network Topology",
+  "source_url": "https://learn.microsoft.com/azure/architecture/networking/architecture/hub-spoke",
+  "tiers": ["edge", "hub", "spoke-workload", "shared-services"],
+  "nodes": [
+    { "id": "fw",          "label": "Azure Firewall",    "icon_id": "firewalls",            "tier": "hub" },
+    { "id": "bastion",     "label": "Bastion",           "icon_id": "bastions",             "tier": "hub" },
+    { "id": "er",          "label": "ExpressRoute",      "icon_id": "expressroute-circuits","tier": "edge" },
+    { "id": "vpn",         "label": "VPN Gateway",       "icon_id": "vpn-gateways",         "tier": "edge" },
+    { "id": "hubvnet",     "label": "Hub VNet",          "icon_id": "virtual-network",      "tier": "hub" },
+    { "id": "workloadvnet","label": "Workload VNet",     "icon_id": "virtual-network",      "tier": "spoke-workload" },
+    { "id": "workload",    "label": "Workload (VM/AKS)", "icon_id": "virtual-machine",      "tier": "spoke-workload" },
+    { "id": "logging",     "label": "Log Analytics",     "icon_id": "log-analytics-workspaces","tier": "shared-services" }
+  ],
+  "edges": [
+    { "source": "er",          "target": "hubvnet" },
+    { "source": "vpn",         "target": "hubvnet" },
+    { "source": "hubvnet",     "target": "fw",          "label": "all spoke traffic" },
+    { "source": "fw",          "target": "workloadvnet","label": "filtered" },
+    { "source": "workloadvnet","target": "workload" },
+    { "source": "bastion",     "target": "workload",    "label": "RDP/SSH", "style": "dashed" },
+    { "source": "workload",    "target": "logging",     "style": "dotted" }
+  ],
+  "well_architected_notes": "Centralizes shared services (firewall, DNS, identity) in the hub. Spokes get filtered egress. Bastion eliminates public RDP/SSH. ExpressRoute for predictable on-prem connectivity."
+}

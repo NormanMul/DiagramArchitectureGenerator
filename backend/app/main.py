@@ -21,6 +21,7 @@ from typing import Annotated
 from fastapi import Depends, FastAPI
 from fastapi.responses import JSONResponse
 
+from app.routers import generate as generate_router
 from app.settings import Settings, get_settings
 from app.telemetry import configure_telemetry
 
@@ -70,8 +71,5 @@ async def readyz(settings: Annotated[Settings, Depends(get_settings)]) -> JSONRe
     )
 
 
-# Routers for /api/* will be wired in Phase 4 (agent) and Phase 3 (renderer).
-# Imports are lazy below to keep the import graph small for the health probes.
-
-# from app.routers import generate as generate_router
+app.include_router(generate_router.router)
 # app.include_router(generate_router.router)

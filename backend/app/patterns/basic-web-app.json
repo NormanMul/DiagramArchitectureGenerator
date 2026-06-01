@@ -1,0 +1,18 @@
+{
+  "pattern_name": "basic-web-app",
+  "title": "Basic Web App (App Service + Azure SQL)",
+  "source_url": "https://learn.microsoft.com/azure/architecture/web-apps/app-service/architectures/basic-web-app",
+  "tiers": ["client", "edge", "app", "data"],
+  "nodes": [
+    { "id": "user",   "label": "User",            "icon_id": "users",          "tier": "client" },
+    { "id": "appgw",  "label": "Application Gateway", "icon_id": "application-gateways", "tier": "edge" },
+    { "id": "appsvc", "label": "App Service",     "icon_id": "app-services",   "tier": "app" },
+    { "id": "sqldb",  "label": "Azure SQL",       "icon_id": "azure-sql",      "tier": "data" }
+  ],
+  "edges": [
+    { "source": "user",   "target": "appgw",  "label": "HTTPS" },
+    { "source": "appgw",  "target": "appsvc", "label": "HTTPS" },
+    { "source": "appsvc", "target": "sqldb",  "label": "TDS" }
+  ],
+  "well_architected_notes": "Reliability: pair regions for DR. Security: enable AAD auth on SQL. Cost: scale plan to load. Performance: enable App Service autoscale."
+}

@@ -17,7 +17,7 @@ class Node(BaseModel):
 
     model_config = ConfigDict(frozen=True, extra="forbid")
 
-    id: str = Field(min_length=1, max_length=64, pattern=r"^[a-z0-9_]+$")
+    id: str = Field(min_length=1, max_length=64, pattern=r"^[a-z0-9_-]+$")
     label: str = Field(min_length=1, max_length=80)
     icon_id: str = Field(min_length=1, description="V19 icon id from icons/manifest.json")
     tier: str = Field(min_length=1, max_length=40, description="Tier label for layout grouping")

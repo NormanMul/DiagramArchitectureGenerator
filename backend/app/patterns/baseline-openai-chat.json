@@ -1,0 +1,26 @@
+{
+  "pattern_name": "baseline-openai-chat",
+  "title": "Baseline OpenAI Chat on Foundry",
+  "source_url": "https://learn.microsoft.com/azure/architecture/ai-ml/architecture/baseline-openai-e2e-chat",
+  "tiers": ["edge", "app", "ai", "data", "ops"],
+  "nodes": [
+    { "id": "afd",       "label": "Front Door + WAF",    "icon_id": "front-door-and-cdn-profiles", "tier": "edge" },
+    { "id": "appsvc",    "label": "App Service",         "icon_id": "app-services",                "tier": "app" },
+    { "id": "foundry",   "label": "Azure AI Foundry",    "icon_id": "azure-openai",                "tier": "ai" },
+    { "id": "search",    "label": "AI Search",           "icon_id": "search-services",             "tier": "ai" },
+    { "id": "storage",   "label": "Blob Storage",        "icon_id": "storage-accounts",            "tier": "data" },
+    { "id": "kv",        "label": "Key Vault",           "icon_id": "key-vaults",                  "tier": "data" },
+    { "id": "appi",      "label": "App Insights",        "icon_id": "application-insights",        "tier": "ops" },
+    { "id": "guard",     "label": "Content Safety",      "icon_id": "azure-openai",                "tier": "ai" }
+  ],
+  "edges": [
+    { "source": "afd",     "target": "appsvc" },
+    { "source": "appsvc",  "target": "foundry",  "label": "completions" },
+    { "source": "appsvc",  "target": "search",   "label": "vector query" },
+    { "source": "search",  "target": "storage",  "label": "RAG source", "style": "dashed" },
+    { "source": "foundry", "target": "guard",    "style": "dashed" },
+    { "source": "kv",      "target": "appsvc",   "style": "dashed" },
+    { "source": "appsvc",  "target": "appi",     "style": "dotted" }
+  ],
+  "well_architected_notes": "Use managed identity to Foundry — no API keys. Apply Content Safety on prompts + completions. App Service + Foundry connect via private endpoint. RAG over AI Search vector index for grounded answers."
+}

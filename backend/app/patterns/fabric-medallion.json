@@ -1,0 +1,25 @@
+{
+  "pattern_name": "fabric-medallion",
+  "title": "Microsoft Fabric Medallion Analytics",
+  "source_url": "https://learn.microsoft.com/azure/architecture/example-scenario/analytics/fabric-medallion",
+  "tiers": ["ingest", "bronze", "silver", "gold", "consume"],
+  "nodes": [
+    { "id": "src",      "label": "Source systems",  "icon_id": "data-sources",                "tier": "ingest" },
+    { "id": "df",       "label": "Data Factory",    "icon_id": "data-factories",              "tier": "ingest" },
+    { "id": "lake",     "label": "OneLake",         "icon_id": "azure-data-lake-storage-gen2","tier": "bronze" },
+    { "id": "bronze",   "label": "Bronze (raw)",    "icon_id": "azure-data-lake-storage-gen2","tier": "bronze" },
+    { "id": "silver",   "label": "Silver (clean)",  "icon_id": "azure-databricks",            "tier": "silver" },
+    { "id": "gold",     "label": "Gold (curated)",  "icon_id": "azure-databricks",            "tier": "gold" },
+    { "id": "warehouse","label": "Fabric Warehouse","icon_id": "synapse-analytics",           "tier": "gold" },
+    { "id": "pbi",      "label": "Power BI",        "icon_id": "power-bi",                    "tier": "consume" }
+  ],
+  "edges": [
+    { "source": "src",     "target": "df" },
+    { "source": "df",      "target": "bronze",   "label": "ingest" },
+    { "source": "bronze",  "target": "silver",   "label": "cleanse" },
+    { "source": "silver",  "target": "gold",     "label": "aggregate" },
+    { "source": "gold",    "target": "warehouse","label": "publish" },
+    { "source": "warehouse","target": "pbi" }
+  ],
+  "well_architected_notes": "Medallion (bronze/silver/gold) gives clear contract per layer. OneLake unifies storage. Lakehouse pattern: same data, multiple compute engines."
+}

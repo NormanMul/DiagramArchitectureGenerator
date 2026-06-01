@@ -179,4 +179,5 @@ def _py_escape(value: str) -> str:
 
 
 def _py_handle(node_id: str) -> str:
-    return f"n_{node_id}"
+    """Convert a kebab-case node id to a safe Python identifier."""
+    return "n_" + node_id.replace("-", "_")

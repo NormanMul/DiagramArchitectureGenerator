@@ -1,0 +1,26 @@
+{
+  "pattern_name": "aks-baseline",
+  "title": "AKS Baseline",
+  "source_url": "https://learn.microsoft.com/azure/architecture/reference-architectures/containers/aks/baseline-aks",
+  "tiers": ["edge", "ingress", "cluster", "data", "ops"],
+  "nodes": [
+    { "id": "afd",     "label": "Front Door + WAF", "icon_id": "front-door-and-cdn-profiles", "tier": "edge" },
+    { "id": "appgw",   "label": "App Gateway",      "icon_id": "application-gateways",        "tier": "ingress" },
+    { "id": "aks",     "label": "AKS",              "icon_id": "kubernetes-services",         "tier": "cluster" },
+    { "id": "acr",     "label": "ACR",              "icon_id": "container-registries",        "tier": "cluster" },
+    { "id": "kv",      "label": "Key Vault",        "icon_id": "key-vaults",                  "tier": "cluster" },
+    { "id": "cosmos",  "label": "Cosmos DB",        "icon_id": "azure-cosmos-db",             "tier": "data" },
+    { "id": "law",     "label": "Log Analytics",    "icon_id": "log-analytics-workspaces",    "tier": "ops" },
+    { "id": "defender","label": "Defender for Cloud","icon_id": "microsoft-defender-for-cloud","tier": "ops" }
+  ],
+  "edges": [
+    { "source": "afd",   "target": "appgw" },
+    { "source": "appgw", "target": "aks",   "label": "mTLS" },
+    { "source": "acr",   "target": "aks",   "label": "image pull", "style": "dashed" },
+    { "source": "kv",    "target": "aks",   "label": "CSI driver", "style": "dashed" },
+    { "source": "aks",   "target": "cosmos","label": "MI auth" },
+    { "source": "aks",   "target": "law",   "style": "dotted" },
+    { "source": "defender","target": "aks", "style": "dotted" }
+  ],
+  "well_architected_notes": "Private cluster, no public API. App Gateway WAF + Front Door WAF defense-in-depth. Workload identity for AAD. Azure Policy for K8s built-ins enforced cluster-wide."
+}

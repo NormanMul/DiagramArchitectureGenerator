@@ -62,7 +62,7 @@ class TestEmitPythonScript:
     @pytest.mark.parametrize(
         ("value", "expected"),
         [
-            ('say "hi"', r'say \"hi\"'),
+            ('say "hi"', r"say \"hi\""),
             (r"back\slash", r"back\\slash"),
             ("clean", "clean"),
         ],
@@ -73,3 +73,6 @@ class TestEmitPythonScript:
     def test_py_handle_is_valid_identifier(self) -> None:
         assert _py_handle("afd_us_east_1").isidentifier()
         assert _py_handle("xyz") == "n_xyz"
+        # Kebab-case node ids must still produce a valid Python identifier.
+        assert _py_handle("agent-1").isidentifier()
+        assert _py_handle("agent-1") == "n_agent_1"

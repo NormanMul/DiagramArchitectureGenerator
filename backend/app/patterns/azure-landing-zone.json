@@ -1,0 +1,28 @@
+{
+  "pattern_name": "azure-landing-zone",
+  "title": "Azure Landing Zone (CAF-aligned)",
+  "source_url": "https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/",
+  "tiers": ["management-groups", "platform", "application"],
+  "nodes": [
+    { "id": "mg-root",     "label": "Root MG",             "icon_id": "management-groups", "tier": "management-groups" },
+    { "id": "mg-platform", "label": "Platform MG",         "icon_id": "management-groups", "tier": "management-groups" },
+    { "id": "mg-lz",       "label": "Landing Zones MG",    "icon_id": "management-groups", "tier": "management-groups" },
+    { "id": "sub-conn",    "label": "Connectivity sub",    "icon_id": "subscriptions",     "tier": "platform" },
+    { "id": "sub-id",      "label": "Identity sub",        "icon_id": "subscriptions",     "tier": "platform" },
+    { "id": "sub-mgmt",    "label": "Management sub",      "icon_id": "subscriptions",     "tier": "platform" },
+    { "id": "sub-corp",    "label": "Corp landing zone",   "icon_id": "subscriptions",     "tier": "application" },
+    { "id": "sub-online",  "label": "Online landing zone", "icon_id": "subscriptions",     "tier": "application" },
+    { "id": "policy",      "label": "Azure Policy",        "icon_id": "policy",            "tier": "platform" }
+  ],
+  "edges": [
+    { "source": "mg-root",     "target": "mg-platform" },
+    { "source": "mg-root",     "target": "mg-lz" },
+    { "source": "mg-platform", "target": "sub-conn" },
+    { "source": "mg-platform", "target": "sub-id" },
+    { "source": "mg-platform", "target": "sub-mgmt" },
+    { "source": "mg-lz",       "target": "sub-corp" },
+    { "source": "mg-lz",       "target": "sub-online" },
+    { "source": "policy",      "target": "mg-root",   "label": "inherits", "style": "dashed" }
+  ],
+  "well_architected_notes": "CAF management-group hierarchy enforces baseline policy from the root down. Platform subs hold shared infra (connectivity hub, identity DCs, mgmt log analytics). App teams own their landing zone subs."
+}

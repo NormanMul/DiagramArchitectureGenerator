@@ -1,0 +1,22 @@
+{
+  "pattern_name": "web-app-private-endpoints",
+  "title": "Web App with Private Endpoints + Front Door",
+  "source_url": "https://learn.microsoft.com/azure/architecture/example-scenario/web-apps/private-web-app",
+  "tiers": ["edge", "app", "data"],
+  "nodes": [
+    { "id": "afd",     "label": "Front Door Premium", "icon_id": "front-door-and-cdn-profiles", "tier": "edge" },
+    { "id": "appsvc",  "label": "App Service (PE)",   "icon_id": "app-services",                "tier": "app" },
+    { "id": "pe-app",  "label": "Private Endpoint",   "icon_id": "private-endpoints",           "tier": "app" },
+    { "id": "sqldb",   "label": "Azure SQL (PE)",     "icon_id": "azure-sql",                   "tier": "data" },
+    { "id": "kv",      "label": "Key Vault (PE)",     "icon_id": "key-vaults",                  "tier": "data" },
+    { "id": "storage", "label": "Storage (PE)",       "icon_id": "storage-accounts",            "tier": "data" }
+  ],
+  "edges": [
+    { "source": "afd",     "target": "pe-app",  "label": "Private Link" },
+    { "source": "pe-app",  "target": "appsvc" },
+    { "source": "appsvc",  "target": "sqldb",   "style": "dashed" },
+    { "source": "appsvc",  "target": "kv",      "style": "dashed" },
+    { "source": "appsvc",  "target": "storage", "style": "dashed" }
+  ],
+  "well_architected_notes": "Public access disabled on all data services. AFD reaches App Service over Private Link (Premium SKU required). Defense-in-depth: WAF at AFD + NSG on PE subnet."
+}

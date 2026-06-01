@@ -1,0 +1,26 @@
+{
+  "pattern_name": "sap-on-azure",
+  "title": "SAP on Azure (HANA on Azure VMs)",
+  "source_url": "https://learn.microsoft.com/azure/architecture/guide/sap/sap-overview",
+  "tiers": ["client", "edge", "app", "db", "shared"],
+  "nodes": [
+    { "id": "users",     "label": "SAP GUI / Fiori",    "icon_id": "users",                "tier": "client" },
+    { "id": "afd",       "label": "App Gateway WAF",    "icon_id": "application-gateways", "tier": "edge" },
+    { "id": "ascs",      "label": "ASCS (HA)",          "icon_id": "virtual-machine",      "tier": "app" },
+    { "id": "pas",       "label": "PAS / AAS",          "icon_id": "virtual-machine",      "tier": "app" },
+    { "id": "hana1",     "label": "HANA primary (M-series)","icon_id": "virtual-machine",  "tier": "db" },
+    { "id": "hana2",     "label": "HANA replica",       "icon_id": "virtual-machine",      "tier": "db" },
+    { "id": "anf",       "label": "Azure NetApp Files", "icon_id": "azure-netapp-files",   "tier": "db" },
+    { "id": "monitoring","label": "AMS for SAP",        "icon_id": "monitor",              "tier": "shared" }
+  ],
+  "edges": [
+    { "source": "users", "target": "afd" },
+    { "source": "afd",   "target": "ascs" },
+    { "source": "ascs",  "target": "pas" },
+    { "source": "pas",   "target": "hana1", "label": "OLTP" },
+    { "source": "hana1", "target": "hana2", "label": "HSR sync", "style": "dashed" },
+    { "source": "hana1", "target": "anf",   "label": "/hana/data" },
+    { "source": "pas",   "target": "monitoring", "style": "dotted" }
+  ],
+  "well_architected_notes": "M-series for HANA certified workloads. ANF for HANA persistence (low-latency NFS). HANA System Replication for HA. AMS for SAP-aware monitoring."
+}

@@ -1,0 +1,24 @@
+{
+  "pattern_name": "zero-trust-web",
+  "title": "Zero-trust Network for Web Apps (App Gateway + Azure Firewall)",
+  "source_url": "https://learn.microsoft.com/azure/architecture/example-scenario/gateway/application-gateway-before-azure-firewall",
+  "tiers": ["edge", "perimeter", "inspection", "app", "data"],
+  "nodes": [
+    { "id": "client", "label": "Client",            "icon_id": "users",                "tier": "edge" },
+    { "id": "afd",    "label": "Front Door + WAF",  "icon_id": "front-door-and-cdn-profiles","tier": "edge" },
+    { "id": "appgw",  "label": "App Gateway WAF",   "icon_id": "application-gateways", "tier": "perimeter" },
+    { "id": "fw",     "label": "Azure Firewall Premium","icon_id": "firewalls",        "tier": "inspection" },
+    { "id": "appsvc", "label": "App Service (PE)",  "icon_id": "app-services",         "tier": "app" },
+    { "id": "sqldb",  "label": "Azure SQL (PE)",    "icon_id": "azure-sql",            "tier": "data" },
+    { "id": "kv",     "label": "Key Vault (PE)",    "icon_id": "key-vaults",           "tier": "data" }
+  ],
+  "edges": [
+    { "source": "client", "target": "afd" },
+    { "source": "afd",    "target": "appgw" },
+    { "source": "appgw",  "target": "fw",     "label": "egress" },
+    { "source": "fw",     "target": "appsvc" },
+    { "source": "appsvc", "target": "sqldb",  "style": "dashed" },
+    { "source": "appsvc", "target": "kv",     "style": "dashed" }
+  ],
+  "well_architected_notes": "Two WAF layers (AFD + AppGW) for defense-in-depth. Azure Firewall Premium adds TLS inspection + IDPS for outbound. All data behind PE. App identity via MI — no app secrets."
+}

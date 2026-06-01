@@ -1,0 +1,25 @@
+{
+  "pattern_name": "sql-mi-migration",
+  "title": "SQL Server to Azure SQL Managed Instance Migration",
+  "source_url": "https://learn.microsoft.com/azure/architecture/example-scenario/data/sql-managed-instance-migration",
+  "tiers": ["source", "transport", "target", "ops"],
+  "nodes": [
+    { "id": "src",      "label": "On-prem SQL Server",   "icon_id": "sql-server",                  "tier": "source" },
+    { "id": "dms",      "label": "Database Migration Service","icon_id": "database-migration-services","tier": "transport" },
+    { "id": "vpn",      "label": "ExpressRoute / VPN",   "icon_id": "vpn-gateways",                "tier": "transport" },
+    { "id": "vnet",     "label": "VNet (delegated)",     "icon_id": "virtual-network",             "tier": "target" },
+    { "id": "mi",       "label": "Azure SQL MI",         "icon_id": "sql-managed-instance",        "tier": "target" },
+    { "id": "storage",  "label": "Blob (backup)",        "icon_id": "storage-accounts",            "tier": "transport" },
+    { "id": "monitor",  "label": "SQL Insights",         "icon_id": "monitor",                     "tier": "ops" }
+  ],
+  "edges": [
+    { "source": "src",     "target": "vpn",     "label": "private" },
+    { "source": "vpn",     "target": "dms" },
+    { "source": "dms",     "target": "mi",      "label": "online migration" },
+    { "source": "src",     "target": "storage", "label": "backup", "style": "dashed" },
+    { "source": "storage", "target": "mi",      "label": "BACKUP RESTORE", "style": "dashed" },
+    { "source": "mi",      "target": "vnet" },
+    { "source": "mi",      "target": "monitor", "style": "dotted" }
+  ],
+  "well_architected_notes": "Use DMS online mode for minimal downtime. Sub-net delegation required for MI. Test cutover with backup-restore path before scheduling online migration."
+}
