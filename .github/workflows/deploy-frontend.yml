@@ -1,10 +1,11 @@
 name: deploy-frontend
 
 on:
-  push:
-    branches: [main]
-    paths: ["frontend/**", ".github/workflows/deploy-frontend.yml"]
   workflow_dispatch:
+  # Auto-trigger on push enabled after bootstrap (see deploy-infra.yml header).
+  # push:
+  #   branches: [main]
+  #   paths: ["frontend/**", ".github/workflows/deploy-frontend.yml"]
 
 permissions:
   id-token: write
@@ -23,6 +24,7 @@ jobs:
   build-and-deploy:
     name: build + push + revision (Next.js SSR on ACA)
     runs-on: ubuntu-latest
+    if: vars.AZURE_DEPLOY_CLIENT_ID != ''
     environment: prod
     steps:
       - uses: actions/checkout@v5

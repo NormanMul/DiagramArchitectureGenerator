@@ -4,10 +4,12 @@ on:
   pull_request:
     branches: [main]
     paths: ["infra/**", ".github/workflows/deploy-infra.yml"]
-  push:
-    branches: [main]
-    paths: ["infra/**", ".github/workflows/deploy-infra.yml"]
   workflow_dispatch:
+  # Note: NOT auto-triggered on push to main. After bootstrap (MI created +
+  # AZURE_DEPLOY_CLIENT_ID variable set), uncomment the push trigger.
+  # push:
+  #   branches: [main]
+  #   paths: ["infra/**", ".github/workflows/deploy-infra.yml"]
 
 permissions:
   id-token: write       # OIDC federation to Azure
@@ -24,6 +26,7 @@ jobs:
   whatif:
     name: bicep what-if
     runs-on: ubuntu-latest
+    if: vars.AZURE_DEPLOY_CLIENT_ID != ''
     steps:
       - uses: actions/checkout@v5
 

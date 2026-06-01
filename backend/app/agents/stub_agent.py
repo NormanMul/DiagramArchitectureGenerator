@@ -82,9 +82,7 @@ def _score(
             [p.title, p.pattern_name, *p.tiers, *(n.label for n in p.nodes)]
         ).lower()
         score = sum(
-            1
-            for word in prompt_l.split()
-            if len(word) >= min_word_len and word in haystack
+            1 for word in prompt_l.split() if len(word) >= min_word_len and word in haystack
         )
         scored.append((score, p))
     scored.sort(key=lambda x: x[0], reverse=True)

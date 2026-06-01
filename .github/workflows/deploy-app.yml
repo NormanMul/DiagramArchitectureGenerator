@@ -1,10 +1,11 @@
 name: deploy-app
 
 on:
-  push:
-    branches: [main]
-    paths: ["backend/**", ".github/workflows/deploy-app.yml"]
   workflow_dispatch:
+  # Auto-trigger on push enabled after bootstrap (see deploy-infra.yml header).
+  # push:
+  #   branches: [main]
+  #   paths: ["backend/**", ".github/workflows/deploy-app.yml"]
 
 permissions:
   id-token: write
@@ -22,6 +23,7 @@ jobs:
   build-and-deploy:
     name: build + push + revision
     runs-on: ubuntu-latest
+    if: vars.AZURE_DEPLOY_CLIENT_ID != ''
     environment: prod
     steps:
       - uses: actions/checkout@v5
@@ -48,7 +50,7 @@ jobs:
           echo "IMAGE_TAG=${IMAGE_TAG}" >> "$GITHUB_ENV"
 
       - name: Trivy scan
-        uses: aquasecurity/trivy-action@0.32.0
+        uses: aquasecurity/trivy-action@0.36.0
         with:
           image-ref: ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
           severity: CRITICAL,HIGH
