@@ -7,7 +7,7 @@
     { "id": "afd",       "label": "Front Door + WAF",    "icon_id": "front-door-and-cdn-profiles", "tier": "edge" },
     { "id": "appsvc",    "label": "App Service",         "icon_id": "app-services",                "tier": "app" },
     { "id": "foundry",   "label": "Azure AI Foundry",    "icon_id": "azure-openai",                "tier": "ai" },
-    { "id": "search",    "label": "AI Search",           "icon_id": "search-services",             "tier": "ai" },
+    { "id": "search",    "label": "AI Search",           "icon_id": "search",             "tier": "ai" },
     { "id": "storage",   "label": "Blob Storage",        "icon_id": "storage-accounts",            "tier": "data" },
     { "id": "kv",        "label": "Key Vault",           "icon_id": "key-vaults",                  "tier": "data" },
     { "id": "appi",      "label": "App Insights",        "icon_id": "application-insights",        "tier": "ops" },

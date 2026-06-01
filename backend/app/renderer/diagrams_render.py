@@ -10,7 +10,9 @@ uploads to Blob Storage and returns signed URLs.
 
 from __future__ import annotations
 
+import base64
 import logging
+import re
 import shutil
 from dataclasses import dataclass
 from pathlib import Path
@@ -57,48 +59,58 @@ def render_pattern(
     svg_path = output_dir / f"{basename}.svg"
     png_path = output_dir / f"{basename}.png"
 
-    # `diagrams` writes <name>.<fmt>. We render once per format because the
-    # library's `outformat` parameter only accepts one at a time per Diagram.
-    for fmt, out in (("svg", svg_path), ("png", png_path)):
-        with Diagram(
-            name=pattern.title,
-            filename=str(output_dir / basename),
-            outformat=fmt,
-            show=False,
-            direction="TB",
-            graph_attr={
-                "bgcolor": "white",
-                "pad": "0.5",
-                "fontname": "DejaVu Sans",
-            },
-            node_attr={"fontname": "DejaVu Sans", "fontsize": "11"},
-            edge_attr={"fontname": "DejaVu Sans", "fontsize": "9"},
-        ):
-            node_handles: dict[str, Custom] = {}
-            for tier in pattern.tiers:
-                tier_nodes = [n for n in pattern.nodes if n.tier == tier]
-                if not tier_nodes:
-                    continue
-                with Cluster(tier):
-                    for node in tier_nodes:
-                        icon = catalog.get(node.icon_id)
-                        # `Custom` embeds the SVG path verbatim — no mutation.
-                        node_handles[node.id] = Custom(node.label, str(icon.path))
+    # Render SVG via graphviz (which can reference PNG icons via xlink:href).
+    with Diagram(
+        name=pattern.title,
+        filename=str(output_dir / basename),
+        outformat="svg",
+        show=False,
+        direction="TB",
+        graph_attr={
+            "bgcolor": "white",
+            "pad": "0.5",
+            "fontname": "DejaVu Sans",
+        },
+        node_attr={"fontname": "DejaVu Sans", "fontsize": "11"},
+        edge_attr={"fontname": "DejaVu Sans", "fontsize": "9"},
+    ):
+        node_handles: dict[str, Custom] = {}
+        for tier in pattern.tiers:
+            tier_nodes = [n for n in pattern.nodes if n.tier == tier]
+            if not tier_nodes:
+                continue
+            with Cluster(tier):
+                for node in tier_nodes:
+                    icon = catalog.get(node.icon_id)
+                    # Use a rasterized PNG copy — graphviz embeds raster
+                    # bitmaps reliably but cannot embed SVG. The original
+                    # bundled SVG is still untouched (drawio_export uses it
+                    # verbatim).
+                    png_icon = icon.rendered_path()
+                    node_handles[node.id] = Custom(node.label, str(png_icon))
 
-            for edge in pattern.edges:
-                src = node_handles[edge.source]
-                dst = node_handles[edge.target]
-                attrs: dict[str, str] = {}
-                if edge.style != "solid":
-                    attrs["style"] = edge.style
-                if edge.label:
-                    attrs["label"] = edge.label
-                src >> DiagEdge(**attrs) >> dst
+        for edge in pattern.edges:
+            src = node_handles[edge.source]
+            dst = node_handles[edge.target]
+            attrs: dict[str, str] = {}
+            if edge.style != "solid":
+                attrs["style"] = edge.style
+            if edge.label:
+                attrs["label"] = edge.label
+            src >> DiagEdge(**attrs) >> dst
 
-        # The `diagrams` library writes filename.<fmt>; ensure our basename is honored.
-        produced = output_dir / f"{basename}.{fmt}"
-        if produced != out:
-            shutil.move(str(produced), str(out))
+    # The diagrams library writes filename.svg; ensure our basename is honored.
+    produced_svg = output_dir / f"{basename}.svg"
+    if produced_svg != svg_path:
+        shutil.move(str(produced_svg), str(svg_path))
+
+    # Inline the icon PNGs into the SVG so the file is self-contained
+    # (otherwise xlink:href points to a temp path that won't resolve in a
+    # browser or when downloaded).
+    _inline_image_refs(svg_path)
+
+    # Generate PNG from the inlined SVG so both formats are pixel-equivalent.
+    _svg_to_png(svg_path, png_path)
 
     py_script = _emit_python_script(pattern, basename=basename)
     py_path = output_dir / f"{basename}.py"
@@ -106,6 +118,40 @@ def render_pattern(
 
     _logger.info("Rendered pattern %s → %s + .png + .py", pattern.pattern_name, svg_path.name)
     return RenderResult(svg_path=svg_path, png_path=png_path, py_script_path=py_path)
+
+
+def _inline_image_refs(svg_path: Path) -> None:
+    """Rewrite any local-path xlink:href to a base64 data URI.
+
+    Graphviz emits `xlink:href="/abs/path.png"` for `Custom` nodes; that won't
+    resolve in a browser. We base64-inline the PNG so the SVG is portable.
+    """
+    svg = svg_path.read_text(encoding="utf-8")
+    pattern_re = re.compile(r'xlink:href="([^"]+\.png)"')
+
+    def _replace(match: re.Match[str]) -> str:
+        ref = match.group(1)
+        if ref.startswith("data:"):
+            return match.group(0)
+        p = Path(ref)
+        if not p.is_file():
+            return match.group(0)
+        b64 = base64.b64encode(p.read_bytes()).decode("ascii")
+        return f'xlink:href="data:image/png;base64,{b64}"'
+
+    rewritten = pattern_re.sub(_replace, svg)
+    svg_path.write_text(rewritten, encoding="utf-8")
+
+
+def _svg_to_png(svg_path: Path, png_path: Path) -> None:
+    """Rasterize the final SVG to PNG via cairosvg."""
+    import cairosvg  # noqa: PLC0415 — heavy native dep, lazy load
+
+    cairosvg.svg2png(
+        url=str(svg_path),
+        write_to=str(png_path),
+        output_width=1600,
+    )
 
 
 def _emit_python_script(pattern: PopulatedPattern, *, basename: str) -> str:

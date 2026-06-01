@@ -6,10 +6,10 @@
   "nodes": [
     { "id": "afd",       "label": "Front Door",           "icon_id": "front-door-and-cdn-profiles", "tier": "edge" },
     { "id": "apim",      "label": "API Management",       "icon_id": "api-management-services",     "tier": "ingress" },
-    { "id": "svc-order", "label": "Order service",        "icon_id": "container-apps",              "tier": "services" },
-    { "id": "svc-pay",   "label": "Payment service",      "icon_id": "container-apps",              "tier": "services" },
-    { "id": "svc-ship",  "label": "Shipping service",     "icon_id": "container-apps",              "tier": "services" },
-    { "id": "sb",        "label": "Service Bus",          "icon_id": "service-bus",                 "tier": "messaging" },
+    { "id": "svc-order", "label": "Order service",        "icon_id": "worker-container-app",              "tier": "services" },
+    { "id": "svc-pay",   "label": "Payment service",      "icon_id": "worker-container-app",              "tier": "services" },
+    { "id": "svc-ship",  "label": "Shipping service",     "icon_id": "worker-container-app",              "tier": "services" },
+    { "id": "sb",        "label": "Service Bus",          "icon_id": "azure-service-bus",                 "tier": "messaging" },
     { "id": "eg",        "label": "Event Grid",           "icon_id": "event-grid-topics",           "tier": "messaging" },
     { "id": "cosmos",    "label": "Cosmos DB",            "icon_id": "azure-cosmos-db",             "tier": "data" }
   ],

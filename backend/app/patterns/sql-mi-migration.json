@@ -5,9 +5,9 @@
   "tiers": ["source", "transport", "target", "ops"],
   "nodes": [
     { "id": "src",      "label": "On-prem SQL Server",   "icon_id": "sql-server",                  "tier": "source" },
-    { "id": "dms",      "label": "Database Migration Service","icon_id": "database-migration-services","tier": "transport" },
-    { "id": "vpn",      "label": "ExpressRoute / VPN",   "icon_id": "vpn-gateways",                "tier": "transport" },
-    { "id": "vnet",     "label": "VNet (delegated)",     "icon_id": "virtual-network",             "tier": "target" },
+    { "id": "dms",      "label": "Database Migration Service","icon_id": "azure-database-migration-services","tier": "transport" },
+    { "id": "vpn",      "label": "ExpressRoute / VPN",   "icon_id": "virtual-network-gateways",                "tier": "transport" },
+    { "id": "vnet",     "label": "VNet (delegated)",     "icon_id": "virtual-networks",             "tier": "target" },
     { "id": "mi",       "label": "Azure SQL MI",         "icon_id": "sql-managed-instance",        "tier": "target" },
     { "id": "storage",  "label": "Blob (backup)",        "icon_id": "storage-accounts",            "tier": "transport" },
     { "id": "monitor",  "label": "SQL Insights",         "icon_id": "monitor",                     "tier": "ops" }

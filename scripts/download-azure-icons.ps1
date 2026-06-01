@@ -78,7 +78,16 @@ try {
     Write-Step "Copied $svgCount SVG icons"
 
     Write-Step "Downloading Terms of Use: $TermsUrl"
-    Invoke-WebRequest -Uri $TermsUrl -OutFile (Join-Path $OutputDir 'Terms_of_Use.pdf') -UseBasicParsing
+    try {
+        Invoke-WebRequest -Uri $TermsUrl -OutFile (Join-Path $OutputDir 'Terms_of_Use.pdf') -UseBasicParsing
+    } catch {
+        Write-Warning "Terms of Use download failed: $($_.Exception.Message)"
+        Write-Warning "Writing a placeholder Terms_of_Use.txt that links to the canonical page."
+        $note = "Microsoft Azure Architecture Icons - Terms of Use`r`n" +
+                "Canonical URL: https://learn.microsoft.com/azure/architecture/icons/`r`n" +
+                "These icons are (c) Microsoft and licensed under the terms at the URL above.`r`n"
+        Set-Content -Path (Join-Path $OutputDir 'Terms_of_Use.txt') -Value $note
+    }
 
     Set-Content -Path (Join-Path $OutputDir 'VERSION.txt') -Value $VersionLabel -NoNewline
     Write-Step "Wrote VERSION.txt = $VersionLabel"

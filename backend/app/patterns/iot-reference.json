@@ -10,9 +10,9 @@
     { "id": "stream",    "label": "Stream Analytics",     "icon_id": "stream-analytics-jobs", "tier": "process" },
     { "id": "func",      "label": "Functions",            "icon_id": "function-apps",         "tier": "process" },
     { "id": "hot",       "label": "Cosmos DB (hot path)", "icon_id": "azure-cosmos-db",       "tier": "store" },
-    { "id": "cold",      "label": "ADLS (cold path)",     "icon_id": "azure-data-lake-storage-gen2","tier": "store" },
-    { "id": "twins",     "label": "Digital Twins",        "icon_id": "azure-digital-twins",   "tier": "consume" },
-    { "id": "pbi",       "label": "Power BI",             "icon_id": "power-bi",              "tier": "consume" }
+    { "id": "cold",      "label": "ADLS (cold path)",     "icon_id": "data-lake-storage-gen1","tier": "store" },
+    { "id": "twins",     "label": "Digital Twins",        "icon_id": "digital-twins",   "tier": "consume" },
+    { "id": "pbi",       "label": "Power BI",             "icon_id": "power-bi-embedded",              "tier": "consume" }
   ],
   "edges": [
     { "source": "devices", "target": "dps",    "label": "register" },

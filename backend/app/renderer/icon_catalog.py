@@ -12,8 +12,10 @@ embeds the SVG as-is without modification.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import logging
+import tempfile
 from collections.abc import Iterator
 from dataclasses import dataclass
 from functools import lru_cache
@@ -64,6 +66,41 @@ class IconRef:
     name: str
     category: str
     path: Path
+
+    def rendered_path(self, dpi: int = 144) -> Path:
+        """Return a PNG copy of this icon suitable for graphviz embedding.
+
+        Graphviz can't reliably embed SVG into its own SVG/PNG output, so we
+        rasterize each V19 icon once per process to a stable temp location
+        and reuse the PNG for every subsequent diagram. This does NOT modify
+        the bundled SVG — the original `.path` is still the source of truth
+        for `drawio_export` (which inlines the raw SVG bytes verbatim).
+        """
+        return _rasterize_to_png(self.path, dpi=dpi)
+
+
+def _rasterize_to_png(svg_path: Path, *, dpi: int = 144) -> Path:
+    """Cached SVG→PNG conversion for icon rendering.
+
+    Cached in a per-process temp directory keyed by (path, mtime, dpi). Idempotent.
+    """
+    cache_dir = Path(tempfile.gettempdir()) / "archgen-icon-png-cache"
+    cache_dir.mkdir(exist_ok=True)
+    key = hashlib.sha1(  # noqa: S324 — non-cryptographic cache key
+        f"{svg_path}|{svg_path.stat().st_mtime_ns}|{dpi}".encode()
+    ).hexdigest()
+    out = cache_dir / f"{key}.png"
+    if not out.exists():
+        import cairosvg  # noqa: PLC0415 — heavy native dep, lazy load
+
+        cairosvg.svg2png(
+            url=str(svg_path),
+            write_to=str(out),
+            dpi=dpi,
+            output_width=128,
+            output_height=128,
+        )
+    return out
 
 
 @dataclass(frozen=True, slots=True)

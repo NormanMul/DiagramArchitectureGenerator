@@ -11,7 +11,7 @@
     { "id": "agent-1",   "label": "Planner agent",        "icon_id": "azure-openai",                "tier": "agents" },
     { "id": "agent-2",   "label": "Retriever agent",      "icon_id": "azure-openai",                "tier": "agents" },
     { "id": "agent-3",   "label": "Executor agent",       "icon_id": "azure-openai",                "tier": "agents" },
-    { "id": "search",    "label": "AI Search",            "icon_id": "search-services",             "tier": "tools" },
+    { "id": "search",    "label": "AI Search",            "icon_id": "search",             "tier": "tools" },
     { "id": "func",      "label": "Functions (tool)",     "icon_id": "function-apps",               "tier": "tools" },
     { "id": "cosmos",    "label": "Cosmos (memory)",      "icon_id": "azure-cosmos-db",             "tier": "tools" },
     { "id": "appi",      "label": "App Insights",         "icon_id": "application-insights",        "tier": "ops" }

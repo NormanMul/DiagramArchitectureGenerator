@@ -103,6 +103,10 @@ def client_with_stubs(monkeypatch: pytest.MonkeyPatch, catalog: IconCatalog) -> 
 
     # Force settings to defaults (no AZ env required for the test).
     monkeypatch.delenv("APPLICATIONINSIGHTS_CONNECTION_STRING", raising=False)
+    # The E2E smoke test environment sets ARCHGEN_STUB_MODE=true; explicitly
+    # disable it here so we exercise the real build_architect path (stubbed
+    # above with monkeypatch).
+    monkeypatch.setenv("ARCHGEN_STUB_MODE", "false")
     from app.settings import get_settings
 
     get_settings.cache_clear()

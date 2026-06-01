@@ -7,9 +7,9 @@
     { "id": "fw",          "label": "Azure Firewall",    "icon_id": "firewalls",            "tier": "hub" },
     { "id": "bastion",     "label": "Bastion",           "icon_id": "bastions",             "tier": "hub" },
     { "id": "er",          "label": "ExpressRoute",      "icon_id": "expressroute-circuits","tier": "edge" },
-    { "id": "vpn",         "label": "VPN Gateway",       "icon_id": "vpn-gateways",         "tier": "edge" },
-    { "id": "hubvnet",     "label": "Hub VNet",          "icon_id": "virtual-network",      "tier": "hub" },
-    { "id": "workloadvnet","label": "Workload VNet",     "icon_id": "virtual-network",      "tier": "spoke-workload" },
+    { "id": "vpn",         "label": "VPN Gateway",       "icon_id": "virtual-network-gateways",         "tier": "edge" },
+    { "id": "hubvnet",     "label": "Hub VNet",          "icon_id": "virtual-networks",      "tier": "hub" },
+    { "id": "workloadvnet","label": "Workload VNet",     "icon_id": "virtual-networks",      "tier": "spoke-workload" },
     { "id": "workload",    "label": "Workload (VM/AKS)", "icon_id": "virtual-machine",      "tier": "spoke-workload" },
     { "id": "logging",     "label": "Log Analytics",     "icon_id": "log-analytics-workspaces","tier": "shared-services" }
   ],

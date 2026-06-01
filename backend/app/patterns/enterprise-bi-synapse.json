@@ -4,14 +4,14 @@
   "source_url": "https://learn.microsoft.com/azure/architecture/example-scenario/analytics/enterprise-bi-synapse",
   "tiers": ["sources", "ingest", "storage", "compute", "consume"],
   "nodes": [
-    { "id": "onprem",  "label": "On-prem sources",       "icon_id": "data-sources",        "tier": "sources" },
-    { "id": "saas",    "label": "SaaS sources",          "icon_id": "data-sources",        "tier": "sources" },
+    { "id": "onprem",  "label": "On-prem sources",       "icon_id": "all-resources",        "tier": "sources" },
+    { "id": "saas",    "label": "SaaS sources",          "icon_id": "all-resources",        "tier": "sources" },
     { "id": "df",      "label": "Data Factory",          "icon_id": "data-factories",      "tier": "ingest" },
-    { "id": "adls",    "label": "ADLS Gen2",             "icon_id": "azure-data-lake-storage-gen2","tier": "storage" },
-    { "id": "syn",     "label": "Synapse SQL Pool",      "icon_id": "synapse-analytics",   "tier": "compute" },
-    { "id": "spark",   "label": "Synapse Spark",         "icon_id": "synapse-analytics",   "tier": "compute" },
+    { "id": "adls",    "label": "ADLS Gen2",             "icon_id": "data-lake-storage-gen1","tier": "storage" },
+    { "id": "syn",     "label": "Synapse SQL Pool",      "icon_id": "azure-synapse-analytics",   "tier": "compute" },
+    { "id": "spark",   "label": "Synapse Spark",         "icon_id": "azure-synapse-analytics",   "tier": "compute" },
     { "id": "aas",     "label": "Analysis Services",     "icon_id": "analysis-services",   "tier": "compute" },
-    { "id": "pbi",     "label": "Power BI",              "icon_id": "power-bi",            "tier": "consume" }
+    { "id": "pbi",     "label": "Power BI",              "icon_id": "power-bi-embedded",            "tier": "consume" }
   ],
   "edges": [
     { "source": "onprem", "target": "df" },

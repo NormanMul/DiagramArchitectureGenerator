@@ -45,13 +45,19 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PATH="/app/.venv/bin:$PATH" \
     PORT=8000
 
-# Graphviz binary + minimal font set the diagrams library needs.
+# Graphviz binary + cairo (for cairosvg SVG→PNG icon rasterization)
+# + minimal font set the diagrams library needs.
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         graphviz \
         fonts-dejavu-core \
         libexpat1 \
         libfontconfig1 \
+        libcairo2 \
+        libpango-1.0-0 \
+        libpangocairo-1.0-0 \
+        libgdk-pixbuf-2.0-0 \
+        libffi8 \
     && rm -rf /var/lib/apt/lists/* \
     && groupadd --system --gid 1000 app \
     && useradd --system --uid 1000 --gid app --home-dir /app --shell /sbin/nologin app
