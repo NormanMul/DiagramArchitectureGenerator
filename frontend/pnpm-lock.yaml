@@ -13,32 +13,32 @@ importers:
         version: 4.13.1
       next:
         specifier: ^15.4.0
-        version: 15.5.18(@babel/core@7.29.7)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+        version: 15.5.18(@babel/core@7.29.7)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       react:
-        specifier: ^19.2.0
-        version: 19.2.6
+        specifier: ^19.2.8
+        version: 19.2.8
       react-dom:
-        specifier: ^19.2.0
-        version: 19.2.6(react@19.2.6)
+        specifier: ^19.2.8
+        version: 19.2.8(react@19.2.8)
     devDependencies:
       '@biomejs/biome':
-        specifier: ^2.4.0
-        version: 2.4.16
+        specifier: ^2.5.6
+        version: 2.5.6
       '@testing-library/dom':
         specifier: ^10.4.0
         version: 10.4.1
       '@testing-library/react':
         specifier: ^16.1.0
-        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.15))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@types/node':
         specifier: ^24.10.0
         version: 24.12.4
       '@types/react':
-        specifier: ^19.2.0
-        version: 19.2.15
+        specifier: ^19.2.18
+        version: 19.2.18
       '@types/react-dom':
-        specifier: ^19.2.0
-        version: 19.2.3(@types/react@19.2.15)
+        specifier: ^19.2.4
+        version: 19.2.4(@types/react@19.2.18)
       '@vitejs/plugin-react':
         specifier: ^5.2.0
         version: 5.2.0(vite@7.3.3(@types/node@24.12.4))
@@ -199,55 +199,55 @@ packages:
     resolution: {integrity: sha512-6zABk/ECA/QYSCQ1NGiVwwbQerUCZ+TQbp64Q3AgmfNvurHH0j8TtXa1qbShXA6qqkpAj4V5W8pP6mLe1mcMqA==}
     engines: {node: '>=18'}
 
-  '@biomejs/biome@2.4.16':
-    resolution: {integrity: sha512-x9ajFh1zChVybCiM3TN6OD4phAqLgtPZjFrZF+aTMYCPjwBO+k529TX7PPsAqtGNLeV4UgzwQnowEgS7bGmzcA==}
+  '@biomejs/biome@2.5.6':
+    resolution: {integrity: sha512-lxVNjv7UF6KfhMJfL9gaUHbWdJdHbsAj6OSmwSYNdhRuG67NxNQ4Xdvh3TUxsSK9sBzJBQhEJj3AopmmNJ5pSA==}
     engines: {node: '>=14.21.3'}
     hasBin: true
 
-  '@biomejs/cli-darwin-arm64@2.4.16':
-    resolution: {integrity: sha512-wxPvu4XOA85YJk9ixSWUmq/QBHbid85BISbOAqqBM/5xQpPk9ayjk5375tOlSC0BeCwNSbPFafQBm+vBumXq0A==}
+  '@biomejs/cli-darwin-arm64@2.5.6':
+    resolution: {integrity: sha512-zMOLZP4oMrjh6m1zcSj1ud2awUPgTuMVbmQhYYWL7J8HwCnbHHBvTm7VBTRuY7epT5bez76IpKYQ11ZAqHFlnw==}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [darwin]
 
-  '@biomejs/cli-darwin-x64@2.4.16':
-    resolution: {integrity: sha512-xFCqGPwYusQJp4N4NJLi1XJiZqjwFdjhT+KqtNy+Ug3qgfczqnTa6MSDvxJF6TkuDLoYJItMapz6tAf7kCekFw==}
+  '@biomejs/cli-darwin-x64@2.5.6':
+    resolution: {integrity: sha512-JAC1VqzvO7Th5ZplU0G2uGfkZbxEe9uDDektPAhF0JLusoz1w+T4okp2bkykI0bbaO2vslKiRfj4gU43JaGreA==}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [darwin]
 
-  '@biomejs/cli-linux-arm64-musl@2.4.16':
-    resolution: {integrity: sha512-oYxnW0ARfJkr72ezzF2OR8N/rtkgLUQeYtF8cFhVswbknHxtTcmzSsanVJP8yQKnGpGpc2ck6c5zLvHahL6Cbg==}
+  '@biomejs/cli-linux-arm64-musl@2.5.6':
+    resolution: {integrity: sha512-eUa3jeeYvfMt19LBeh6E5PUZpxnTC4JqNWo+EDjTtQjAr2xLGnWaxACtVU1DQqmHYbvThlJzLX+ZsYgrqh2qVw==}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [linux]
 
-  '@biomejs/cli-linux-arm64@2.4.16':
-    resolution: {integrity: sha512-2kFb4//jxfZaP6D+Rj5VkHkxgyD9EoRAVBEQb8PKRv+s4NO2zYNJKXFaJmK1CmhufJOWEfpHKaRbOja7qjmdhQ==}
+  '@biomejs/cli-linux-arm64@2.5.6':
+    resolution: {integrity: sha512-6XsYwCFkp5sMxl85ffhgeGpGgs6A7dRYFnkceZ7WVxvycuTnGdD5xa534Z3xfrBQ0JCMK/mujT6ZNPJoghedwg==}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [linux]
 
-  '@biomejs/cli-linux-x64-musl@2.4.16':
-    resolution: {integrity: sha512-iHDS+MCM65DPqWGu+ECC3uoALyj2H7F4nVUPxIPjz/PIl94EUu+EDfGZDzFP+NY1EOPVt9NQvwFqq7HdMmowdg==}
+  '@biomejs/cli-linux-x64-musl@2.5.6':
+    resolution: {integrity: sha512-2Vp13QdKysH3HIWLaYLhUUwbK+jbZonJD1K+Lr0d0RO4wH7mkYd43vJixEDm8cUWrowoRz4UUHF1nm9Ae7ym8A==}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [linux]
 
-  '@biomejs/cli-linux-x64@2.4.16':
-    resolution: {integrity: sha512-NbcBbi/nJqn5baae6wqRXdS7Gadf2uRpehSh6vMSYpG8OhkXl/Xg8aorWrJ+9VWqAT5ml90alLvorkpMW0nBwQ==}
+  '@biomejs/cli-linux-x64@2.5.6':
+    resolution: {integrity: sha512-Pop9VXCFUhFTMfFefZ39S+u2rOPyNp5iHlxbZRwXGACHLy2r0jjiRgJHmaEKJzL3SyxlVeGShXhvvElvWowonA==}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [linux]
 
-  '@biomejs/cli-win32-arm64@2.4.16':
-    resolution: {integrity: sha512-0rgImMsNb5v/chhkIFe3wu7PEFClS6RBAYUijGL9UsYN3PanSaoK24HSSuSJb1pYbYYVjzAyZTl3gtjJ84BM8A==}
+  '@biomejs/cli-win32-arm64@2.5.6':
+    resolution: {integrity: sha512-tDGshcm6BdkZOCGnTDX0Y8/U4IfBSlnUU7T56nNDuPEfed+aHg+u8G36NB43fJVl0Os6+QURXIE1yuD7AaEofA==}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [win32]
 
-  '@biomejs/cli-win32-x64@2.4.16':
-    resolution: {integrity: sha512-Kp85jgoBHa05gix6UIRjfCDiUV3w/8VIdZ247VyyO2gEjaw12WEVhdIjlxp/AMzXxqxQwbxNTDVZ3Mwd2RG5rw==}
+  '@biomejs/cli-win32-x64@2.5.6':
+    resolution: {integrity: sha512-WN05KwXnTO/2J45RQPvzZMXf7tZUIofHoR35xIPfCo7pQ2RFidxI8sfb5mGsaTxdMmEOzHzOPRCdA5/fCpc7xQ==}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [win32]
@@ -832,13 +832,13 @@ packages:
   '@types/node@24.12.4':
     resolution: {integrity: sha512-GUUEShf+PBCGW2KaXwcIt3Yk+e3pkKwWKb9GSyM9WQVE+ep2jzmHdGsHzu4wgcZy5fN9FBdVzjpBQsYlpfpgLA==}
 
-  '@types/react-dom@19.2.3':
-    resolution: {integrity: sha512-jp2L/eY6fn+KgVVQAOqYItbF0VY/YApe5Mz2F0aykSO8gx31bYCZyvSeYxCHKvzHG5eZjc+zyaS5BrBWya2+kQ==}
+  '@types/react-dom@19.2.4':
+    resolution: {integrity: sha512-Bsc+QHgp+P/F02XDzNCY9jnZNCUuLki36KT7VKrTXXLdHf+vHMNZnW1rVu5DNW/rCK+fya3DATySbLM4yhtKUw==}
     peerDependencies:
       '@types/react': ^19.2.0
 
-  '@types/react@19.2.15':
-    resolution: {integrity: sha512-eRwcGNHve+E8qtEQSSRl6urh+rFop4v8gm6O8rGv25CodbvFdLjA1vVQ1KkiFE0w0UPOnb8tDiFKL5lp0rtY5Q==}
+  '@types/react@19.2.18':
+    resolution: {integrity: sha512-AnzbBERsrLKtk2XSfTbYRLjQPdy116Sty4q+T+Bp3IC4l6jNBvreVPAHmpq9qhXQM7CXZPjLVmGMw9sy+hxQ3w==}
 
   '@typespec/ts-http-runtime@0.3.5':
     resolution: {integrity: sha512-yURCknZhvywvQItHMMmFSo+fq5arCUIyz/CVk7jD89MSai7dkaX8ufjCWp3NttLojoTVbcE72ri+be/TnEbMHw==}
@@ -1422,10 +1422,10 @@ packages:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
 
-  react-dom@19.2.6:
-    resolution: {integrity: sha512-0prMI+hvBbPjsWnxDLxlCGyM8PN6UuWjEUCYmZhO67xIV9Xasa/r/vDnq+Xyq4Lo27g8QSbO5YzARu0D1Sps3g==}
+  react-dom@19.2.8:
+    resolution: {integrity: sha512-rVprimfGBG3DR+Tq0IQG2DT5PxKth1WIGDmj5yPmlzr4YBe7uyE+Du4oVqTDXZSHGGGXRtTJEGSSePyQCMBglQ==}
     peerDependencies:
-      react: ^19.2.6
+      react: ^19.2.8
 
   react-is@17.0.2:
     resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
@@ -1434,8 +1434,8 @@ packages:
     resolution: {integrity: sha512-QgT5//D3jfjJb6Gsjxv0Slpj23ip+HtOpnNgnb2S5zU3CB26G/IDPGoy4RJB42wzFE46DRsstbW6tKHoKbhAxw==}
     engines: {node: '>=0.10.0'}
 
-  react@19.2.6:
-    resolution: {integrity: sha512-sfWGGfavi0xr8Pg0sVsyHMAOziVYKgPLNrS7ig+ivMNb3wbCBw3KxtflsGBAwD3gYQlE/AEZsTLgToRrSCjb0Q==}
+  react@19.2.8:
+    resolution: {integrity: sha512-PWaYA1L/q9u2u7xYQi+Y3L3Yfnie7XyLeaJICV1MGD6LprsBxcAqGjYyr0eY3p+QdsA+x/Irkt4Qif8D63+Sbw==}
     engines: {node: '>=0.10.0'}
 
   rollup@4.61.0:
@@ -1952,39 +1952,39 @@ snapshots:
 
   '@bcoe/v8-coverage@1.0.2': {}
 
-  '@biomejs/biome@2.4.16':
+  '@biomejs/biome@2.5.6':
     optionalDependencies:
-      '@biomejs/cli-darwin-arm64': 2.4.16
-      '@biomejs/cli-darwin-x64': 2.4.16
-      '@biomejs/cli-linux-arm64': 2.4.16
-      '@biomejs/cli-linux-arm64-musl': 2.4.16
-      '@biomejs/cli-linux-x64': 2.4.16
-      '@biomejs/cli-linux-x64-musl': 2.4.16
-      '@biomejs/cli-win32-arm64': 2.4.16
-      '@biomejs/cli-win32-x64': 2.4.16
+      '@biomejs/cli-darwin-arm64': 2.5.6
+      '@biomejs/cli-darwin-x64': 2.5.6
+      '@biomejs/cli-linux-arm64': 2.5.6
+      '@biomejs/cli-linux-arm64-musl': 2.5.6
+      '@biomejs/cli-linux-x64': 2.5.6
+      '@biomejs/cli-linux-x64-musl': 2.5.6
+      '@biomejs/cli-win32-arm64': 2.5.6
+      '@biomejs/cli-win32-x64': 2.5.6
 
-  '@biomejs/cli-darwin-arm64@2.4.16':
+  '@biomejs/cli-darwin-arm64@2.5.6':
     optional: true
 
-  '@biomejs/cli-darwin-x64@2.4.16':
+  '@biomejs/cli-darwin-x64@2.5.6':
     optional: true
 
-  '@biomejs/cli-linux-arm64-musl@2.4.16':
+  '@biomejs/cli-linux-arm64-musl@2.5.6':
     optional: true
 
-  '@biomejs/cli-linux-arm64@2.4.16':
+  '@biomejs/cli-linux-arm64@2.5.6':
     optional: true
 
-  '@biomejs/cli-linux-x64-musl@2.4.16':
+  '@biomejs/cli-linux-x64-musl@2.5.6':
     optional: true
 
-  '@biomejs/cli-linux-x64@2.4.16':
+  '@biomejs/cli-linux-x64@2.5.6':
     optional: true
 
-  '@biomejs/cli-win32-arm64@2.4.16':
+  '@biomejs/cli-win32-arm64@2.5.6':
     optional: true
 
-  '@biomejs/cli-win32-x64@2.4.16':
+  '@biomejs/cli-win32-x64@2.5.6':
     optional: true
 
   '@csstools/color-helpers@5.1.0': {}
@@ -2338,15 +2338,15 @@ snapshots:
       picocolors: 1.1.1
       pretty-format: 27.5.1
 
-  '@testing-library/react@16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.15))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
+  '@testing-library/react@16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
       '@babel/runtime': 7.29.7
       '@testing-library/dom': 10.4.1
-      react: 19.2.6
-      react-dom: 19.2.6(react@19.2.6)
+      react: 19.2.8
+      react-dom: 19.2.8(react@19.2.8)
     optionalDependencies:
-      '@types/react': 19.2.15
-      '@types/react-dom': 19.2.3(@types/react@19.2.15)
+      '@types/react': 19.2.18
+      '@types/react-dom': 19.2.4(@types/react@19.2.18)
 
   '@types/aria-query@5.0.4': {}
 
@@ -2384,11 +2384,11 @@ snapshots:
     dependencies:
       undici-types: 7.16.0
 
-  '@types/react-dom@19.2.3(@types/react@19.2.15)':
+  '@types/react-dom@19.2.4(@types/react@19.2.18)':
     dependencies:
-      '@types/react': 19.2.15
+      '@types/react': 19.2.18
 
-  '@types/react@19.2.15':
+  '@types/react@19.2.18':
     dependencies:
       csstype: 3.2.3
 
@@ -2934,15 +2934,15 @@ snapshots:
 
   nanoid@3.3.12: {}
 
-  next@15.5.18(@babel/core@7.29.7)(react-dom@19.2.6(react@19.2.6))(react@19.2.6):
+  next@15.5.18(@babel/core@7.29.7)(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
       '@next/env': 15.5.18
       '@swc/helpers': 0.5.15
       caniuse-lite: 1.0.30001793
       postcss: 8.4.31
-      react: 19.2.6
-      react-dom: 19.2.6(react@19.2.6)
-      styled-jsx: 5.1.6(@babel/core@7.29.7)(react@19.2.6)
+      react: 19.2.8
+      react-dom: 19.2.8(react@19.2.8)
+      styled-jsx: 5.1.6(@babel/core@7.29.7)(react@19.2.8)
     optionalDependencies:
       '@next/swc-darwin-arm64': 15.5.18
       '@next/swc-darwin-x64': 15.5.18
@@ -3009,16 +3009,16 @@ snapshots:
 
   punycode@2.3.1: {}
 
-  react-dom@19.2.6(react@19.2.6):
+  react-dom@19.2.8(react@19.2.8):
     dependencies:
-      react: 19.2.6
+      react: 19.2.8
       scheduler: 0.27.0
 
   react-is@17.0.2: {}
 
   react-refresh@0.18.0: {}
 
-  react@19.2.6: {}
+  react@19.2.8: {}
 
   rollup@4.61.0:
     dependencies:
@@ -3143,10 +3143,10 @@ snapshots:
     dependencies:
       js-tokens: 9.0.1
 
-  styled-jsx@5.1.6(@babel/core@7.29.7)(react@19.2.6):
+  styled-jsx@5.1.6(@babel/core@7.29.7)(react@19.2.8):
     dependencies:
       client-only: 0.0.1
-      react: 19.2.6
+      react: 19.2.8
     optionalDependencies:
       '@babel/core': 7.29.7
 
