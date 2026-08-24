@@ -15,15 +15,15 @@
   },
   "dependencies": {
     "next": "^15.4.0",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "@azure/identity": "^4.13.0"
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "@azure/identity": "^4.13.2"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.0",
+    "@biomejs/biome": "^2.5.9",
     "@types/node": "^24.10.0",
-    "@types/react": "^19.2.0",
-    "@types/react-dom": "^19.2.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
     "@vitejs/plugin-react": "^5.2.0",
     "typescript": "^5.9.0",
     "vitest": "^3.2.0",
