@@ -1,0 +1,1 @@
+diff: icons/azure_V19/: No such file or directory
